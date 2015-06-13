@@ -29,6 +29,7 @@ class PotionServiceProvider extends ServiceProvider
      */
     protected $defer = false;
 
+
     /**
      * Bootstrap the application events.
      *
@@ -39,8 +40,10 @@ class PotionServiceProvider extends ServiceProvider
         // Handle config file
         // -- -- Get path
         $config_file = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+
         // -- -- Merge from config
         $this->mergeConfigFrom($config_file, 'potion');
+
         // -- -- Tell laravel that we publish this file
         $this->publishes([
             $config_file => config_path('potion.php')
@@ -81,7 +84,7 @@ class PotionServiceProvider extends ServiceProvider
      */
     public function getConfig()
     {
-        return $this->app['config'];
+        return $this->app['config']['potion'];
     }
 
     /**
@@ -92,28 +95,60 @@ class PotionServiceProvider extends ServiceProvider
         // Potion asset url
         \Blade::extend(function($view, $compiler)
         {
-            $pattern = $compiler->createMatcher('potion_asset_url');
+            /**
+             * If the directive method exists, we're using Laravel 5.1+
+             */
+            if (method_exists($compiler, 'directive')) {
+                $pattern = '(potion_asset_url)';
+            }
+            else {
+                $pattern = $compiler->createMatcher('potion_asset_url');
+            }
             return preg_replace($pattern, '$1<?php echo(\ClassyGeeks\Potion\BladeHelpers::assetUrl$2); ?>', $view);
         });
 
         // Potion Css
         \Blade::extend(function($view, $compiler)
         {
-            $pattern = $compiler->createMatcher('potion_asset_css');
+            /**
+             * If the directive method exists, we're using Laravel 5.1+
+             */
+            if (method_exists($compiler, 'directive')) {
+                $pattern = '(potion_asset_css)';
+            }
+            else {
+                $pattern = $compiler->createMatcher('potion_asset_css');
+            }
             return preg_replace($pattern, '$1<?php echo(\ClassyGeeks\Potion\BladeHelpers::assetCss$2); ?>', $view);
         });
 
         // Potion Js
         \Blade::extend(function($view, $compiler)
         {
-            $pattern = $compiler->createMatcher('potion_asset_js');
+            /**
+             * If the directive method exists, we're using Laravel 5.1+
+             */
+            if (method_exists($compiler, 'directive')) {
+                $pattern = '(potion_asset_js)';
+            }
+            else {
+                $pattern = $compiler->createMatcher('potion_asset_js');
+            }
             return preg_replace($pattern, '$1<?php echo(\ClassyGeeks\Potion\BladeHelpers::assetJs$2); ?>', $view);
         });
 
         // Potion Img
         \Blade::extend(function($view, $compiler)
         {
-            $pattern = $compiler->createMatcher('potion_asset_img');
+            /**
+             * If the directive method exists, we're using Laravel 5.1+
+             */
+            if (method_exists($compiler, 'directive')) {
+                $pattern = '(potion_asset_img)';
+            }
+            else {
+                $pattern = $compiler->createMatcher('potion_asset_img');
+            }
             return preg_replace($pattern, '$1<?php echo(\ClassyGeeks\Potion\BladeHelpers::assetImg$2); ?>', $view);
         });
     }

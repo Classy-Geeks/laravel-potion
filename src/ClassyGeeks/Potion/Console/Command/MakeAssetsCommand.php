@@ -155,6 +155,9 @@ class MakeAssetsCommand extends Command
                 // -- Asset content
                 $asset_content = '';
 
+                // -- Default empty append
+                $outputAppend = '';
+
                 // -- Resources
                 foreach ($potion['resources'] as $resource) {
 
@@ -191,8 +194,14 @@ class MakeAssetsCommand extends Command
                         // -- -- -- File
                         $file_path = $this->config['assets_path'] . DIRECTORY_SEPARATOR . $file_asset->getSourcePath();
 
+                        // -- -- -- Possible outputAppend string
+                        $outputAppend = isset($potion['output_append']) ? $potion['output_append'] : '';
+
                         // -- -- -- Echo
                         $this->info("Processing resource file: {$file_path}");
+
+                        // -- -- -- Append possible $outputAppend (post-echo so original name is shown when reporting resource)
+                        $file_path .= $outputAppend;
 
                         // -- -- -- Make file, or combine
                         if ($potion['output'] !== false) {
@@ -209,7 +218,7 @@ class MakeAssetsCommand extends Command
                             }
 
                             // -- -- -- -- Add to cache
-                            $cache[$file_asset->getSourcePath()] = $this->versionFile($file_path);
+                            $cache[$file_asset->getSourcePath() . $outputAppend] = $this->versionFile($file_path);
                         }
                     }
                 }
@@ -218,7 +227,7 @@ class MakeAssetsCommand extends Command
                 if ($potion['output'] !== false) {
 
                     // -- -- Write to file
-                    $file_path = $this->config['assets_path'] . DIRECTORY_SEPARATOR . $potion['output'];
+                    $file_path = $this->config['assets_path'] . DIRECTORY_SEPARATOR . $potion['output'] . $outputAppend;
 
                     // -- -- Echo
                     $this->info("Writing asset file: {$file_path}");
@@ -229,7 +238,7 @@ class MakeAssetsCommand extends Command
                     }
 
                     // -- -- Add to cache
-                    $cache[$potion['output']] = $this->versionFile($file_path);
+                    $cache[$potion['output'] . $outputAppend] = $this->versionFile($file_path);
                 }
             }
 

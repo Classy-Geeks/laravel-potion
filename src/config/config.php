@@ -48,6 +48,30 @@ return [
         [
             // Resources, relative paths to 'resource_path' above, can be any valid file or glob pattern
             'resources' => [
+                '/css/individual/*.scss'
+            ],
+
+            // Filters to use, from filters below
+            'filters' => [
+                'css_import',
+                'css_rewrite',
+                'css_min',
+            ],
+
+            // Output file name, this signifies you are combining all resources together,
+            // putting false will generate each file with original file names
+            'output' => false,
+
+            //
+            // If specified, this optional string parameter will be concatenated to the end of every asset
+            // published as part of this potion. This can be used regardless of the value provided for the
+            // output parameter.
+            'output_append' => '.css',
+        ],
+
+        [
+            // Resources, relative paths to 'resource_path' above, can be any valid file or glob pattern
+            'resources' => [
                 '/js/global/*.js'
             ],
 

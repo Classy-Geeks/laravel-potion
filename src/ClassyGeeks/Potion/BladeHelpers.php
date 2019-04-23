@@ -50,7 +50,7 @@ class BladeHelpers
 
         // Version?
         if ($version) {
-            $ret .= "v={$cache[$name]}";
+            $ret .= "?v={$cache[$name]}";
         }
 
         return $ret;
@@ -59,11 +59,11 @@ class BladeHelpers
     /**
      * Asset Css
      * @param $name
-     * @param $rel
      * @param $version
+     * @param $rel
      * @return bool|string
      */
-    public static function assetCss($name, $rel = 'stylesheet', $version = false)
+    public static function assetCss($name, $version = false, $rel = 'stylesheet')
     {
         // Get cache
         $cache = Cache::get('potion_assets', []);
@@ -77,16 +77,17 @@ class BladeHelpers
         $url = self::assetUrl($name, $version);
 
         // Return
-        return "<link href=\"{$url}\" rel=\"{$rel}\" type=\"text/css\" />";
+        return "<link href=\"{$url}\" rel=\"{$rel}\" type=\"text/css\" />\n";
     }
 
     /**
      * Asset Js
      * @param $name
      * @param $version
+     * @param $defer
      * @return bool|string
      */
-    public static function assetJs($name, $version = false)
+    public static function assetJs($name, $version = false, $defer = FALSE)
     {
         // Get cache
         $cache = Cache::get('potion_assets', []);
@@ -99,8 +100,11 @@ class BladeHelpers
         // Url
         $url = self::assetUrl($name, $version);
 
+        // Deferred ?
+        $defer = $defer ? 'defer' : '';
+
         // Return
-        return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
+        return "<script type=\"text/javascript\" src=\"{$url}\" $defer></script>\n";
     }
 
     /**
@@ -123,6 +127,6 @@ class BladeHelpers
         $url = self::assetUrl($name, $version);
 
         // Return
-        return "<img src=\"{$url}\" />";
+        return "<img src=\"{$url}\" />\n";
     }
 }
